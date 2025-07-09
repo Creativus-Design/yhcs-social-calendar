@@ -137,7 +137,7 @@ class SocialMediaCalendar {
 
     async loadData() {
         try {
-            const response = await fetch('data.json');
+            const response = await fetch('https://creativus-sites.com/data/wp-json/yhs-social-posts/v1/all');
             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
             this.data = await response.json();
         } catch (error) {
