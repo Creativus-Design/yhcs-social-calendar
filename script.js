@@ -133,8 +133,6 @@ class SocialMediaCalendar {
         return card;
     }
 
-    // --- Unchanged Methods from here ---
-
     async loadData() {
         try {
             const response = await fetch('https://creativus-sites.com/data/wp-json/yhs-social-posts/v1/all');
@@ -226,8 +224,6 @@ class SocialMediaCalendar {
         setTimeout(() => modal.classList.add('show'), 10);
     }
 
-
-
     hideModal(modal) {
         modal.classList.remove('show');
         setTimeout(() => modal.style.display = 'none', 300);
@@ -240,15 +236,19 @@ class SocialMediaCalendar {
     }
 
     showSocialText(text) {
-        const formattedText = text ? text.replace(/<br\s*\/?>/gi, '\n') : '';
-        document.getElementById('socialMediaText').innerText = formattedText;
+        document.getElementById('socialMediaText').innerHTML = text || '';
         this.showModal('textModal');
     }
 
     async copyToClipboard(text) {
         if (!text) return;
         try {
-            const cleanText = text.replace(/<br\s*\/?>/gi, '\n');
+            // Use a temporary element to correctly convert HTML to plain text.
+            // This handles all tags (<p>, <br>, etc.) and decodes HTML entities.
+            const tempEl = document.createElement('div');
+            tempEl.innerHTML = text;
+            const cleanText = tempEl.innerText;
+
             await navigator.clipboard.writeText(cleanText);
             this.showToast('Text copied to clipboard!');
         } catch (error) {
