@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Media Calendar</title>
+    <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="loader" class="loader-overlay">
+        <div class="spinner"></div>
+    </div>
+
+    <div class="container">
+        <header class="header">
+            <div class="header-content">
+                <h1>
+                    <iconify-icon icon="lucide:calendar-days"></iconify-icon>
+                    <span class="header-title-text">Social Media Calendar</span>
+                </h1>
+                <div class="header-controls">
+                    <div class="month-selector">
+                        <iconify-icon icon="material-symbols:calendar-month-outline-sharp"></iconify-icon>
+                        <select id="monthSelector"></select>
+                    </div>
+
+                    <div class="view-options">
+                        <label for="grid-columns"><iconify-icon icon="lucide:layout-grid"></iconify-icon></label>
+                        <select id="grid-columns">
+                            <option value="auto" selected>Auto</option>
+                            <option value="2">2 Columns</option>
+                            <option value="3">3 Columns</option>
+                            <option value="4">4 Columns</option>
+                        </select>
+                    </div>
+
+                    <div class="stats">
+                        <span class="stat-item">
+                            <iconify-icon icon="lucide:file-text"></iconify-icon>
+                            <span id="totalPosts">0</span> Posts
+                        </span>
+                        <span class="stat-item">
+                            <iconify-icon icon="lucide:calendar-check"></iconify-icon>
+                            <span id="monthlyPosts">0</span> This Month
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="posts-grid" id="postsGrid">
+                </div>
+        </main>
+
+        <footer class="page-navigation">
+            <button id="prevMonthBtn" class="nav-btn">
+                <iconify-icon icon="lucide:arrow-left"></iconify-icon>
+                <span>Previous Month</span>
+            </button>
+            <button id="nextMonthBtn" class="nav-btn">
+                <span>Next Month</span>
+                <iconify-icon icon="lucide:arrow-right"></iconify-icon>
+            </button>
+        </footer>
+    </div>
+
+    <div id="imageModal" class="modal">
+        <span class="close-btn modal-close">&times;</span>
+        <img id="modalImage" src="" alt="Full size image">
+    </div>
+    <div id="textModal" class="modal">
+        <div class="modal-content text-modal">
+            <div class="modal-header">
+                <h3><iconify-icon icon="lucide:share-2"></iconify-icon> Social Media Text</h3>
+                <span class="close-btn text-modal-close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="text-content" id="socialMediaText"></div>
+                <button class="copy-btn" id="copyBtn">
+                    <iconify-icon icon="lucide:copy"></iconify-icon> Copy Text
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
