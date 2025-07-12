@@ -106,7 +106,7 @@ class SocialMediaCalendar {
         card.className = 'post-card';
         const date = new Date(post['Publishing Date']);
         const formattedDate = date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
-        const imageUrl = post.Design ? this.getResizedImageUrl(post.Design, 400, 400) : '';
+        const imageUrl = post.Design ? this.getResizedImageUrl(post.Design, 600, 600) : '';
 
         card.innerHTML = `
             <div class="post-header">
