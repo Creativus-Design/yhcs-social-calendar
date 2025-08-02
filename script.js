@@ -64,7 +64,6 @@ class SocialMediaCalendar {
         this.updateNavButtons();
     }
 
-    // --- REFACTORED: renderPosts now uses requestAnimationFrame ---
     renderPosts() {
         const postsGrid = document.getElementById('postsGrid');
         postsGrid.innerHTML = '';
@@ -86,17 +85,15 @@ class SocialMediaCalendar {
             }
 
             postsGrid.appendChild(fragment);
-            this.observeNewImages(); // Observe images for the newly added chunk
+            this.observeNewImages(); 
 
             currentIndex = endIndex;
 
-            // If there are more posts to render, schedule the next chunk
             if (currentIndex < monthPosts.length) {
                 requestAnimationFrame(renderChunk);
             }
         };
 
-        // Start the rendering process
         renderChunk();
     }
 
@@ -106,7 +103,9 @@ class SocialMediaCalendar {
         card.className = 'post-card';
         const date = new Date(post['Publishing Date']);
         const formattedDate = date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
-        const imageUrl = post.Design ? this.getResizedImageUrl(post.Design, 600, 600) : '';
+        
+        const originalImageUrl = post.Design;
+        const displayImageUrl = originalImageUrl ? this.getResizedImageUrl(originalImageUrl, 600, 600) : '';
 
         card.innerHTML = `
             <div class="post-header">
@@ -114,10 +113,11 @@ class SocialMediaCalendar {
                 <div class="post-actions">
                     <button class="action-btn show-text-btn" title="View Social Media Text"><iconify-icon icon="lucide:share-2"></iconify-icon></button>
                     <button class="action-btn copy-text-btn" title="Copy Social Text"><iconify-icon icon="lucide:copy"></iconify-icon></button>
+                    ${originalImageUrl ? `<button class="action-btn download-img-btn" title="Download Original Image"><iconify-icon icon="lucide:download"></iconify-icon></button>` : ''}
                 </div>
             </div>
             <div class="post-image">
-                ${imageUrl ? `<img data-src="${imageUrl}" alt="Post design" class="lazy-image">` : '<div class="image-overlay">No Image</div>'}
+                ${displayImageUrl ? `<img data-src="${displayImageUrl}" alt="Post design" class="lazy-image">` : '<div class="image-overlay">No Image</div>'}
             </div>
             <div class="post-content">
                 <h3 class="post-title">${post['Design Content'] || ''}</h3>
@@ -127,10 +127,47 @@ class SocialMediaCalendar {
 
         card.querySelector('.show-text-btn').addEventListener('click', () => this.showSocialText(post['Text to publish on social media']));
         card.querySelector('.copy-text-btn').addEventListener('click', () => this.copyToClipboard(post['Text to publish on social media']));
-        if (imageUrl) {
-            card.querySelector('.post-image').addEventListener('click', () => this.showFullImage(post.Design));
+        
+        if (originalImageUrl) {
+            card.querySelector('.post-image').addEventListener('click', () => this.showFullImage(originalImageUrl));
+            card.querySelector('.download-img-btn').addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.downloadImage(originalImageUrl);
+            });
         }
         return card;
+    }
+
+    async downloadImage(imageUrl) {
+        if (!imageUrl) return;
+
+        this.showToast('Starting download...', 'success');
+
+        try {
+            const response = await fetch(imageUrl);
+            if (!response.ok) {
+                throw new Error(`Failed to fetch image: ${response.statusText}`);
+            }
+            const blob = await response.blob();
+
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            
+            const filename = imageUrl.substring(imageUrl.lastIndexOf('/') + 1);
+            a.download = filename || 'download.jpg';
+            
+            document.body.appendChild(a);
+            a.click();
+            
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+
+        } catch (error) {
+            console.error('Error downloading image:', error);
+            this.showToast('Could not download image.', 'error');
+        }
     }
 
     async loadData() {
@@ -243,8 +280,6 @@ class SocialMediaCalendar {
     async copyToClipboard(text) {
         if (!text) return;
         try {
-            // Use a temporary element to correctly convert HTML to plain text.
-            // This handles all tags (<p>, <br>, etc.) and decodes HTML entities.
             const tempEl = document.createElement('div');
             tempEl.innerHTML = text;
             const cleanText = tempEl.innerText;
