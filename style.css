@@ -325,6 +325,7 @@ iconify-icon {
     font-size: 24px;
     opacity: 0;
     transition: var(--transition);
+    flex-direction: column;
 }
 .post-image:hover .image-overlay { opacity: 1; }
 
