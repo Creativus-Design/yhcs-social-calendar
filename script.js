@@ -117,7 +117,7 @@ class SocialMediaCalendar {
                 </div>
             </div>
             <div class="post-image">
-                ${displayImageUrl ? `<img data-src="${displayImageUrl}" alt="Post design" class="lazy-image">` : '<div class="image-overlay">No Image</div>'}
+                ${displayImageUrl ? `<img data-src="${displayImageUrl}" alt="Post design" class="lazy-image">` : '<div class="image-overlay">No Image<br /><small>Design In Progress...</small></div>'}
             </div>
             <div class="post-content">
                 <h3 class="post-title">${post['Design Content'] || ''}</h3>
