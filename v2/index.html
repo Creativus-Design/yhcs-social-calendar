@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Social Media Calendar · Your Healthcare Space</title>
+  <meta name="description" content="Social media content calendar for Your Healthcare Space.">
+  <meta name="robots" content="noindex,nofollow">
+
+  <!-- Fancybox CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5/dist/fancybox/fancybox.css">
+  <!-- Iconify -->
+  <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+
+  <!-- App CSS -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════════════
+       PASSWORD SCREEN
+  ═══════════════════════════════════════════════════ -->
+  <div id="password-screen" role="dialog" aria-modal="true" aria-label="Login">
+    <div class="login-card">
+      <div class="login-logo">🌿</div>
+      <h1>Content Calendar</h1>
+      <p>Enter your password to access the social media calendar</p>
+
+      <form id="login-form" autocomplete="off">
+        <div class="input-group">
+          <input
+            type="password"
+            id="pw-input"
+            placeholder="Enter password"
+            autocomplete="current-password"
+            required
+            autofocus
+          >
+          <button type="button" class="toggle-pw" id="toggle-pw" aria-label="Toggle password visibility">👁</button>
+        </div>
+        <button type="submit" class="btn-login">Unlock Calendar →</button>
+      </form>
+
+      <p class="login-error" id="login-error" role="alert"></p>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       MAIN APPLICATION
+  ═══════════════════════════════════════════════════ -->
+  <div id="app">
+
+    <!-- ── Header ───────────────────────────────── -->
+    <header class="site-header" role="banner">
+      <div class="header-inner">
+
+        <!-- Left: logo + title -->
+        <div class="header-left">
+          <div class="site-logo">
+            <iconify-icon icon="mdi:calendar-month" width="22" height="22"></iconify-icon>
+          </div>
+          <span class="site-title">Social Media Calendar</span>
+        </div>
+
+        <!-- Center: month dropdown -->
+        <div class="month-select-wrap">
+          <svg class="month-select-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/>
+            <line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+          </svg>
+          <select id="month-select" aria-label="Jump to month"></select>
+          <svg class="month-select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="6 9 12 15 18 9"/>
+          </svg>
+        </div>
+
+        <!-- Right: column toggle + logout -->
+        <div class="header-controls">
+          <div class="col-toggle" role="group" aria-label="Grid columns">
+            <button class="col-btn" data-cols="1" title="1 column">1</button>
+            <button class="col-btn" data-cols="2" title="2 columns">2</button>
+            <button class="col-btn active" data-cols="3" title="3 columns">3</button>
+            <button class="col-btn" data-cols="4" title="4 columns">4</button>
+          </div>
+          <button class="btn-logout" id="logout-btn" title="Log out">
+            <iconify-icon icon="mdi:lock-outline" width="14"></iconify-icon> Logout
+          </button>
+        </div>
+
+      </div>
+    </header>
+
+    <!-- ── Calendar Grid ─────────────────────────── -->
+    <main class="main-content" role="main">
+      <div id="calendar-container"></div>
+    </main>
+
+    <!-- ── Bottom Month Navigation ───────────────── -->
+    <nav class="bottom-nav" id="bottom-nav" aria-label="Month navigation"></nav>
+
+  </div><!-- /#app -->
+
+  <!-- ══════════════════════════════════════════════════
+       SHARE MODAL
+  ═══════════════════════════════════════════════════ -->
+  <div
+    class="modal-backdrop"
+    id="share-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modal-heading"
+  >
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2 class="modal-title" id="modal-heading">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+          </svg>
+          <span id="modal-title-text">Social Media Text</span>
+        </h2>
+        <button class="modal-close" id="modal-close-btn" aria-label="Close modal">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <div id="modal-social-body"></div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-secondary" id="modal-cancel-btn">Close</button>
+        <button class="btn-primary" id="modal-copy-btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:-2px;margin-right:4px">
+            <rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+          </svg>
+          Copy Text
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Scroll to Top Button ──────────────────────── -->
+  <button class="scroll-top" id="scroll-top-btn" aria-label="Scroll to top" title="Back to top">↑</button>
+
+  <!-- Fancybox JS -->
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5/dist/fancybox/fancybox.umd.js"></script>
+
+  <!-- App JS -->
+  <script src="app.js"></script>
+</body>
+</html>
